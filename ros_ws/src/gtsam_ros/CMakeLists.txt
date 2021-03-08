@@ -1,0 +1,47 @@
+cmake_minimum_required(VERSION 3.0.2)
+project(gtsam_ros)
+ 
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
+)
+
+find_package(OpenCV REQUIRED)
+find_package(Boost REQUIRED COMPONENTS
+	thread
+	system
+	regex
+	timer
+	serialization
+	filesystem
+)
+find_package(Eigen3 REQUIRED)
+find_package(GTSAMCMakeTools)
+find_package(GTSAM REQUIRED)
+include_directories(${GTSAM_INCLUDE_DIR})
+
+set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_RELEASE}")
+
+include_directories(include
+  ${catkin_INCLUDE_DIRS}
+  ${OpenCV_INCLUDE_DIRS}
+  ${Boost_INCLUDE_DIRS}
+#	${EIGEN3_INCLUDE_DIR}
+
+)
+
+add_executable(CameraResectioning src/CameraResectioning)
+add_executable(creating_fg src/creating_fg)
+add_executable(localization src/localization)
+add_executable(pose_slam src/pose_slam)
+
+target_link_libraries(CameraResectioning ${catkin_LIBRARIES} ${OpenCV_LIBRARIES}
+	${Boost_LIBRARIES}  gtsam)
+
+target_link_libraries(creating_fg ${catkin_LIBRARIES} ${OpenCV_LIBRARIES}
+	${Boost_LIBRARIES} gtsam)
+
+target_link_libraries(localization ${catkin_LIBRARIES} ${OpenCV_LIBRARIES}
+	${Boost_LIBRARIES}  gtsam)
+
+target_link_libraries(pose_slam ${catkin_LIBRARIES} ${OpenCV_LIBRARIES}
+	${Boost_LIBRARIES}  gtsam)
