@@ -33,6 +33,7 @@ add_executable(CameraResectioning src/CameraResectioning)
 add_executable(creating_fg src/creating_fg)
 add_executable(localization src/localization)
 add_executable(pose_slam src/pose_slam)
+add_executable(gtsamSolver src/gtsamSolver)
 
 target_link_libraries(CameraResectioning ${catkin_LIBRARIES} ${OpenCV_LIBRARIES}
 	${Boost_LIBRARIES}  gtsam)
@@ -44,4 +45,7 @@ target_link_libraries(localization ${catkin_LIBRARIES} ${OpenCV_LIBRARIES}
 	${Boost_LIBRARIES}  gtsam)
 
 target_link_libraries(pose_slam ${catkin_LIBRARIES} ${OpenCV_LIBRARIES}
+	${Boost_LIBRARIES}  gtsam)
+
+target_link_libraries(gtsamSolver ${catkin_LIBRARIES} ${OpenCV_LIBRARIES}
 	${Boost_LIBRARIES}  gtsam)
