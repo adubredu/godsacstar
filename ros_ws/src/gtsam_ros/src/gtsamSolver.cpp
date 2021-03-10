@@ -94,9 +94,9 @@ vector<float> PoseNetiSam::update(int updateNum)
 	initialValues.clear();
 	currentEst = isam.calculateEstimate();
 
-	currentPose[0] = currentEst.at(Symbol('x', currentKey));
-	currentPose[1] = currentEst.at(Symbol('x', currentKey));
-	currentPose[2] = currentEst.at(Symbol('x', currentKey));
+	currentPose[0] = currentEst.at<gtsam::Pose2>(Symbol('x', currentKey)).x();
+	currentPose[1] = currentEst.at<gtsam::Pose2>(Symbol('x', currentKey)).y();
+	currentPose[2] = currentEst.at<gtsam::Pose2>(Symbol('x', currentKey)).theta(); 
 
 	return currentPose;
 }
@@ -104,19 +104,25 @@ vector<float> PoseNetiSam::update(int updateNum)
 
 vector<float> PoseNetiSam::getEstimate(int id)
 {
+	vector<float> estimate;
+	estimate.push_back(currentEst.at<gtsam::Pose2>(Symbol('x', currentKey)).x());
+	estimate.push_back(currentEst.at<gtsam::Pose2>(Symbol('x', currentKey)).y());
+	estimate.push_back(currentEst.at<gtsam::Pose2>(Symbol('x', currentKey)).theta());
 
+	return estimate;
 }
 
 
 void PoseNetiSam::printGraph()
 {
-
+	graph.print();
 }
 
 
 void PoseNetiSam::printResult()
 {
-
+	cout << "Current estimate is x: "<< currentPose[0]<<" | y: "<<
+	currentPose[1]<<" | theta: "<<currentPose[2]<<endl;
 }
 
 
