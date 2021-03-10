@@ -130,6 +130,7 @@ void PoseNetiSam::printResult()
 
 int main (int argc, char ** argv)
 {
+	//TESTING 
 	float delta = 0.1;
 	float pi = 3.1415;
 	vector<float> priorMean{0.1,-0.1,0.01};

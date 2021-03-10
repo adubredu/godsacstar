@@ -29,10 +29,10 @@ include_directories(include
 
 )
 
-add_executable(CameraResectioning src/CameraResectioning)
-add_executable(creating_fg src/creating_fg)
-add_executable(localization src/localization)
-add_executable(pose_slam src/pose_slam)
+add_executable(CameraResectioning src/examples/CameraResectioning)
+add_executable(creating_fg src/examples/creating_fg)
+add_executable(localization src/examples/localization)
+add_executable(pose_slam src/examples/pose_slam)
 add_executable(gtsamSolver src/gtsamSolver)
 
 target_link_libraries(CameraResectioning ${catkin_LIBRARIES} ${OpenCV_LIBRARIES}
