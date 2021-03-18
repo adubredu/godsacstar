@@ -3,6 +3,8 @@ project(gtsam_ros)
  
 find_package(catkin REQUIRED COMPONENTS
   roscpp
+  geometry_msgs
+  message_generation
 )
 
 find_package(OpenCV REQUIRED)
@@ -13,6 +15,16 @@ find_package(Boost REQUIRED COMPONENTS
 	timer
 	serialization
 	filesystem
+)
+
+add_service_files(
+  FILES
+  ISAMinput.srv 
+  )
+
+generate_messages(
+  DEPENDENCIES
+  geometry_msgs 
 )
 find_package(Eigen3 REQUIRED)
 find_package(GTSAMCMakeTools)
