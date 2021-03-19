@@ -34,7 +34,7 @@ bool GTSAM_node::receive_input_service(gtsam_ros::ISAMinput::Request &req,
 	res.estimate.x = estimate[0];
 	res.estimate.y = estimate[1];
 	res.estimate.theta = estimate[2];
-
+	ROS_INFO("sending estimate...");
 	return true;
 }
 
