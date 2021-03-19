@@ -9,7 +9,7 @@ def send_measurement_request():
 	rospy.wait_for_service("isam_input_channel")
 	try:
 		channel = rospy.ServiceProxy("isam_input_channel", ISAMinput)
-		send_request = ISAMinput()
+		send_request = ISAMinputRequest()
 		send_request.motion_mean.x = 5.0
 		send_request.motion_mean.y = 0.0
 		send_request.motion_mean.theta = 0.0
