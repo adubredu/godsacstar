@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import rospy
 import roslib
 from geometry_msgs.msg import Pose2D
