@@ -41,7 +41,7 @@ def get_odometry_pose(img_timestamp):
 
 def nn_init():
     scene = 'nclt'
-    weightsDir = '/home/tannerliu/Software/dsacstar/network_output/nclt_trial_v2_e2e.pth'
+    weightsDir = '/home/tannerliu/Software/posenet_gtsam/dsacstar/network_output/nclt_trial_v2_e2e.pth'
     # hyperparameters
     hypotheses = 64 # number of hypotheses, i.e. number of RANSAC iterations
     threshold = 10 # inlier threshold in pixels (RGB) or centimeters (RGB-D)
@@ -112,16 +112,19 @@ def optimize_pose_graph(measurement, odom_pose):
         send_request.motion_mean.x = odom_pose[0][0]
         send_request.motion_mean.y = odom_pose[0][1]
         send_request.motion_mean.theta = odom_pose[0][2]
-        send_request.motion_covariance.x = odom_pose[1][0]
-        send_request.motion_covariance.y = odom_pose[1][1]
-        send_request.motion_covariance.theta = odom_pose[1][2]
+        # send_request.motion_covariance.x = odom_pose[1][0]
+        # send_request.motion_covariance.y = odom_pose[1][1]
+        # send_request.motion_covariance.theta = odom_pose[1][2]
+        send_request.motion_covariance.x = 0.1
+        send_request.motion_covariance.y = 0.1
+        send_request.motion_covariance.theta = 0.1
 
         #sending measurement pose
         send_request.measurement_mean.x = measurement[0]
         send_request.measurement_mean.y = measurement[1]
         send_request.measurement_mean.theta = measurement[2]
-        send_request.measurement_covariance.x = 0.01
-        send_request.measurement_covariance.y = 0.01
+        send_request.measurement_covariance.x = 0.1
+        send_request.measurement_covariance.y = 0.1
         send_request.measurement_covariance.theta = 0.1
 
         #receiving optimized pose
@@ -150,13 +153,11 @@ def optimize_pose_graph(measurement, odom_pose):
 if __name__ == '__main__':
     result_estimates = []
     network, imgTrans = nn_init()
-    for image in os.listdir(image_dataset):
+    for image in os.listdir(image_dataset): #TODO: change to sequential 
         imageDir = image_dataset + "/" + image
         img_timestamp = int(image[11:-10])
         measurement = nn_predict(network, imgTrans, imageDir)
-
         odom_pose = get_odometry_pose(img_timestamp)
-
+        print(odom_pose)
         result = optimize_pose_graph(measurement, odom_pose)
-
         result_estimates.append(result)
