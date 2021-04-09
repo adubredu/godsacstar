@@ -36,6 +36,7 @@ def optimize_pose_graph(measurement, odom_pose):
         channel = rospy.ServiceProxy("isam_input_channel", ISAMinput)
         send_request = ISAMinputRequest()
 
+        #sending odometry pose
         send_request.motion_mean.x = odom_pose[0][0]
         send_request.motion_mean.y = odom_pose[0][1]
         send_request.motion_mean.theta = odom_pose[0][2]
@@ -43,21 +44,27 @@ def optimize_pose_graph(measurement, odom_pose):
         send_request.motion_covariance.y = odom_pose[1][1]
         send_request.motion_covariance.theta = odom_pose[1][2]
 
+        #sending measurement pose
         send_request.measurement_mean.x = measurement[0]
         send_request.measurement_mean.y = measurement[1]
         send_request.measurement_mean.theta = measurement[2]
         send_request.measurement_covariance.x = 0.01
         send_request.measurement_covariance.y = 0.01
         send_request.measurement_covariance.theta = 0.1
+
+        #receiving optimized pose
         response = channel(send_request)
 
-        # print("estimate is: ",response.estimate.x,response.estimate.y,
-        #   response.estimate.theta)
+        #reading optimized x,y,th
         opt_result[0] = response.estimate.x
         opt_result[1] = response.estimate.y
         opt_result[2] = response.estimate.theta
 
     except rospy.ServiceException as e:
+        '''
+        if this exception is caught, it's likely that you didn't run 
+         `rosrun gtsam_ros gtsam_rosnode`  to start the gtsam solver service.
+        '''
         print(e)
         sys.exit()
 
