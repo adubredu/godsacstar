@@ -1,2 +1,3 @@
 ros_ws/build
 ros_ws/devel
+ros_ws/src/gtsam_ros/data/rgb
