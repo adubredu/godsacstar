@@ -10,19 +10,14 @@ import os
 from scipy.spatial.transform import Rotation as R
 
 # dsac imports
-sys.path.append('/home/tannerliu/Software/posenet_gtsam/dsacstar')
-import torch
-import cv2
-import dsacstar
-from network import Network
-from skimage import io
-from torchvision import transforms
-from matplotlib import pyplot as plt
+from dsacStar import dsacStar
 
 
 # odom = odometry('/root/posenet_gtsam/ros_ws/src/gtsam_ros/data/', 0, 0)
 odom = odometry('/home/tannerliu/Software/posenet_gtsam/ros_ws/src/gtsam_ros/data')
 image_dataset = '/home/tannerliu/Software/posenet_gtsam/ros_ws/src/gtsam_ros/data/rgb'
+weightsDir = '/home/tannerliu/Software/posenet_gtsam/dsacstar/network_output/nclt_trial_v2_e2e.pth'
+focalLength = 100 # TODO: modify this
 
 def get_odometry_pose(img_timestamp):
     motionCum = [0,0,0]
@@ -37,68 +32,6 @@ def get_odometry_pose(img_timestamp):
                         motionCov[1]+motionCovCum[1],
                         motionCov[2]+motionCovCum[2]]
     return motionCum, motionCovCum
-
-
-def nn_init():
-    scene = 'nclt'
-    weightsDir = '/home/tannerliu/Software/posenet_gtsam/dsacstar/network_output/nclt_trial_v2_e2e.pth'
-    # hyperparameters
-    hypotheses = 64 # number of hypotheses, i.e. number of RANSAC iterations
-    threshold = 10 # inlier threshold in pixels (RGB) or centimeters (RGB-D)
-    inlieralpha = 100 # alpha parameter of the soft inlier count; controls the softness of the hypotheses score distribution; lower means softer
-    maxpixelerror = 100 # maximum reprojection (RGB, in px) or 3D distance (RGB-D, in cm) error when checking pose consistency towards all measurements; error is clamped to this value for stability
-    mode = 1 # test mode: 1 = RGB, 2 = RGB-D
-    # dataset parameters
-    focal_length = 100
-    # load weights
-    network = Network(torch.zeros((3)), False)
-    network.load_state_dict(torch.load(weightsDir))
-    network = network.cuda()
-    network.eval()
-    #define image processing elements
-    image_transform = transforms.Compose([
-        transforms.ToPILImage(),
-        transforms.Resize(int(480)),
-        transforms.Grayscale(),
-        transforms.ColorJitter(brightness=0.1, contrast=0.1),
-        transforms.ToTensor(),
-        transforms.Normalize(
-            mean=[0.4],
-            std=[0.25]
-            )
-    ])
-    return network, image_transform
- 
-def nn_predict(network, imgTrans, imageDir):
-    image = io.imread(imageDir)
-    image = imgTrans(image)
-    image = image.unsqueeze(0)
-    image = image.cuda()
-    scene_coordinates = network(image)
-    scene_coordinates = scene_coordinates.cpu()
-    out_pose = torch.zeros((4, 4))
-    hypotheses = 64 # number of hypotheses, i.e. number of RANSAC iterations
-    threshold = 10 # inlier threshold in pixels (RGB) or centimeters (RGB-D)
-    inlieralpha = 100 # alpha parameter of the soft inlier count; controls the softness of the hypotheses score distribution; lower means softer
-    maxpixelerror = 100 # maximum reprojection (RGB, in px) or 3D distance (RGB-D, in cm) error when checking pose consistency towards all measurements; error is clamped to this value for stability
-    mode = 1 # test mode: 1 = RGB, 2 = RGB-D
-    focal_length = 100
-    dsacstar.forward_rgb(
-        scene_coordinates, 
-        out_pose, 
-        hypotheses, 
-        threshold,
-        focal_length, 
-        float(image.size(3) / 2), #principal point assumed in image center
-        float(image.size(2) / 2), 
-        inlieralpha,
-        maxpixelerror,
-        network.OUTPUT_SUBSAMPLE)
-    out_pose = out_pose.inverse().numpy()
-    r = R.from_matrix(out_pose[:3, :3])
-    theta = r.as_euler('zxy', degrees=False)[0]
-    prediction = [out_pose[0,3], out_pose[1,3], theta]
-    return prediction
 
 
 def optimize_pose_graph(measurement, odom_pose):
@@ -152,12 +85,17 @@ def optimize_pose_graph(measurement, odom_pose):
 
 if __name__ == '__main__':
     result_estimates = []
-    network, imgTrans = nn_init()
-    for image in os.listdir(image_dataset): #TODO: change to sequential 
+    ds = dsacStar(weightsDir, focalLength)
+    for image in sorted(os.listdir(image_dataset)):
+        print(image)
         imageDir = image_dataset + "/" + image
         img_timestamp = int(image[11:-10])
-        measurement = nn_predict(network, imgTrans, imageDir)
+        measurement = ds.predict(imageDir)
+        # extract SE(2) pose
+        r = R.from_matrix(measurement[:3, :3])
+        theta = r.as_euler('zxy', degrees=False)[0]
+        measurement = [measurement[0,3], measurement[1,3], theta]
+        # retrieve current time step odometry
         odom_pose = get_odometry_pose(img_timestamp)
-        print(odom_pose)
         result = optimize_pose_graph(measurement, odom_pose)
         result_estimates.append(result)
