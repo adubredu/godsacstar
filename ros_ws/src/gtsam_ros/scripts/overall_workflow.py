@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 import rospy
 import roslib
-from geometry_msgs.msg import Pose2D
+import tf
+from geometry_msgs.msg import Pose, PoseArray 
 from gtsam_ros.srv import *
 import numpy as np 
 from read_odometry import odometry 
@@ -32,6 +33,38 @@ def get_odometry_pose(img_timestamp):
                         motionCov[1]+motionCovCum[1],
                         motionCov[2]+motionCovCum[2]]
     return motionCum, motionCovCum
+
+
+def publish_entire_trajectory(estimates):
+    traj = []
+    for pose in estimates:
+        p = Pose()
+        p.position.x = pose[0]
+        p.position.y = pose[1]
+        quaternion = tf.transformations.quaternion_from_euler(0,0,pose[2])
+        p.orientation.x = quaternion[0]
+        p.orientation.y = quaternion[1]
+        p.orientation.z = quaternion[2]
+        p.orientation.w = quaternion[3]
+        traj.append(p)
+    array = PoseArray()
+    array.poses = traj  
+    
+    pub = rospy.Publisher('/estimated_poses', PoseArray, queue_size=100)
+    pub.publish(array)
+
+
+def publish_single_pose(pose_estimate):
+    p = Pose()
+    p.position.x = pose[0]
+    p.position.y = pose[1]
+    quaternion = tf.transformations.quaternion_from_euler(0,0,pose[2])
+    p.orientation.x = quaternion[0]
+    p.orientation.y = quaternion[1]
+    p.orientation.z = quaternion[2]
+    p.orientation.w = quaternion[3] 
+    pub = rospy.Publisher('/estimated_pose', Pose, queue_size=100)
+    pub.publish(p)
 
 
 def optimize_pose_graph(measurement, odom_pose):
@@ -99,3 +132,5 @@ if __name__ == '__main__':
         odom_pose = get_odometry_pose(img_timestamp)
         result = optimize_pose_graph(measurement, odom_pose)
         result_estimates.append(result)
+
+    publish_entire_trajectory(result_estimates)
