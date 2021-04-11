@@ -64,7 +64,7 @@ def publish_single_pose(pose_estimate):
     p.orientation.z = quaternion[2]
     p.orientation.w = quaternion[3] 
     pub = rospy.Publisher('/estimated_pose', Pose, queue_size=100)
-    pub.publish(p)
+    pub.publish(p)#
 
 
 def optimize_pose_graph(measurement, odom_pose):
@@ -117,6 +117,8 @@ def optimize_pose_graph(measurement, odom_pose):
 
 
 if __name__ == '__main__':
+    rospy.init_node('pose_estimator')
+
     result_estimates = []
     ds = dsacStar(weightsDir, focalLength)
     for image in sorted(os.listdir(image_dataset)):
