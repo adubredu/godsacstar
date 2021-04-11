@@ -2,7 +2,7 @@
 import rospy
 import roslib
 import tf
-from geometry_msgs.msg import Pose, PoseArray 
+from geometry_msgs.msg import Pose, PoseArray, PoseStamped 
 from gtsam_ros.srv import *
 import numpy as np 
 from read_odometry import odometry 
@@ -48,6 +48,7 @@ def publish_entire_trajectory(estimates):
         p.orientation.w = quaternion[3]
         traj.append(p)
     array = PoseArray()
+    array.header.frame_id = "map"
     array.poses = traj  
     
     pub = rospy.Publisher('/estimated_poses', PoseArray, queue_size=100)
@@ -55,7 +56,8 @@ def publish_entire_trajectory(estimates):
 
 
 def publish_single_pose(pose_estimate):
-    p = Pose()
+    p = PoseStamped()
+    p.header.frame_id = "map"
     p.position.x = pose[0]
     p.position.y = pose[1]
     quaternion = tf.transformations.quaternion_from_euler(0,0,pose[2])
@@ -64,7 +66,7 @@ def publish_single_pose(pose_estimate):
     p.orientation.z = quaternion[2]
     p.orientation.w = quaternion[3] 
     pub = rospy.Publisher('/estimated_pose', Pose, queue_size=100)
-    pub.publish(p)#
+    pub.publish(p)
 
 
 def optimize_pose_graph(measurement, odom_pose):
