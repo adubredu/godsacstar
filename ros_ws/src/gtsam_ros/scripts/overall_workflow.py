@@ -135,4 +135,6 @@ if __name__ == '__main__':
         result = optimize_pose_graph(measurement, odom_pose)
         result_estimates.append(result)
 
+        # publish_single_pose(result)
+
     publish_entire_trajectory(result_estimates)
