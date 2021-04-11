@@ -62,6 +62,8 @@ add_executable(pose_slam src/examples/pose_slam)
 # add_executable(gtsamSolver src/gtsamSolver)
 add_executable(gtsam_rosnode src/gtsam_rosnode.cpp src/gtsamSolver.cpp )
 
+add_executable(visualize_trajectory src/visualize_trajectory.cpp)
+
 target_link_libraries(CameraResectioning ${catkin_LIBRARIES} ${OpenCV_LIBRARIES}
 	${Boost_LIBRARIES}  gtsam)
 
@@ -79,3 +81,6 @@ target_link_libraries(pose_slam ${catkin_LIBRARIES} ${OpenCV_LIBRARIES}
 
 target_link_libraries(gtsam_rosnode ${catkin_LIBRARIES} ${OpenCV_LIBRARIES}
 	${Boost_LIBRARIES}  gtsam)
+
+target_link_libraries(visualize_trajectory ${catkin_LIBRARIES} ${OpenCV_LIBRARIES}
+  ${Boost_LIBRARIES}  gtsam)

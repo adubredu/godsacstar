@@ -1,0 +1,14 @@
+<launch>
+    <!-- gtsam node-->
+    <node name="gtsam_rosnode" pkg="gtsam_ros" type="gtsam_rosnode" output="screen">
+    </node>
+
+    <!-- pose msg -->
+    <node name="visualize_trajectory" pkg="gtsam_ros" type="visualize_trajectory" output="screen">
+    </node>
+
+    <!-- rviz -->
+    <node name="rviz_dsam" pkg="rviz" type="rviz" args="-d $(find gtsam_ros)/rviz/dsam.rviz">
+    </node>
+
+</launch>
