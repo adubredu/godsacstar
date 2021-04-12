@@ -1,3 +1,5 @@
 ros_ws/build
 ros_ws/devel
 ros_ws/src/gtsam_ros/data/rgb
+ros_ws/src/.vscode/settings.json
+ros_ws/src/.vscode/c_cpp_properties.json
