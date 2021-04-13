@@ -61,7 +61,7 @@ dsacstar
 │   │   │── 2012-01-08
 │   │   │   ├── groundtruth_2012-01-08
 │   │   │   ├── lb3
-|   │   │   │   ├── CamX
+│   │   │   │   ├── CamX
 │   │   │── another_seq
 │   │   │   ├── groundtruth_another_seq
 │   │   │   ├── lb3
