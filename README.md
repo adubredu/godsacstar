@@ -24,12 +24,24 @@ This project also uses [Pytorch 1.7](https://pytorch.org/) for neural network tr
 To clone this repo as well as the DSAC* submodule use the command 
 
 ```
-git clone --recursive https://github.com/alphonsusadubredu/posenet_gtsam
+$ git clone --recursive https://github.com/alphonsusadubredu/posenet_gtsam
 ```
 
 ## Usage
-Just clone and use it lol... 
+To run the entire pose estimation pipeline, first open a new terminal and run the following commands
+```
+$ cd posenet_gtsam/ros_ws
+$ catkin_make
+$ source devel/setup.bash
+$ rosrun gtsam_ros gtsam_rosnode
+```
+These series of commands starts up the gtsam solver service in the background.
 
+Next, open a new terminal and run the following commands to perform pose estimation
+```
+$ cd src/gtsam_ros/scripts
+$ python overall_workflow.py
+```
 
 ## Authors
 Alphonsus Adu-Bredu, Tianyi Liu, Yuqing Zhang, Jingyu Song, Noah Del Coro
