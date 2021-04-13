@@ -23,7 +23,7 @@ This project also uses [Pytorch](https://pytorch.org/) for neural network traini
 
 
 ## Usage
-
+Just clone and use it lol...
 
 
 
