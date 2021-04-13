@@ -6,7 +6,7 @@ pose estimation from RGB images.
 - [Background](#background)
 - [Install](#install)
 - [Usage](#usage)
-- [Authors](#authors)
+- [Authors](#author)
 
 ## Background
 
