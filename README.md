@@ -59,13 +59,13 @@ dsacstar
 ├── datasets
 │   ├── nclt_source
 │   │   │── 2012-01-08
-│   │   │   ├──groundtruth_2012-01-08
-│   │   │   ├──lb3
-|   |   |   |   |──CamX
+│   │   │   ├── groundtruth_2012-01-08
+│   │   │   ├── lb3
+|   |   |   |   |── CamX
 │   │   │── another_seq
-│   │   │   ├──groundtruth_another_seq
-│   │   │   ├──lb3
-|   |   |   |   |──CamX
+│   │   │   ├── groundtruth_another_seq
+│   │   │   ├── lb3
+|   |   |   |   |── CamX
 ├── dsacstar
 ```
 You may also need to change some parameters according to the cam you use and region you want to sample. Please check the `datasets/setup_nclt.py` script and find the `TODO` block!
