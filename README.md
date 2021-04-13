@@ -58,14 +58,10 @@ Firstly, you will need to go to [NCLT website](http://robots.engin.umich.edu/ncl
 dsacstar
 ├── datasets
 │   ├── nclt_source
-│   │   │── 2012-01-08
-│   │   │   ├── groundtruth_2012-01-08
+│   │   │── 20XX-XX-XX
+│   │   │   ├── groundtruth_20XX-XX-XX
 │   │   │   ├── lb3
 │   │   │   │   ├── CamX
-│   │   │── another_seq
-│   │   │   ├── groundtruth_another_seq
-│   │   │   ├── lb3
-|   |   |   |   |── CamX
 ├── dsacstar
 ```
 You may also need to change some parameters according to the cam you use and region you want to sample. Please check the `datasets/setup_nclt.py` script and find the `TODO` block!
