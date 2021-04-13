@@ -28,8 +28,7 @@ git clone --recursive https://github.com/alphonsusadubredu/posenet_gtsam
 ```
 
 ## Usage
-Just clone and use it lol...
-git clone --recursive
+Just clone and use it lol... 
 
 
 ## Authors
