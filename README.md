@@ -19,7 +19,7 @@ This repository contains our implementation of this pose estimation system. Our 
 ## Install
 Although this project was built and tested using [ROS melodic](http://wiki.ros.org/melodic/Installation/Ubuntu), most of the other versions of ROS could potentially support this project.
 
-This project also uses [Pytorch](https://pytorch.org/) for neural network training and inference and [GTSAM](https://github.com/borglab/gtsam) for pose graph optimization.
+This project also uses [Pytorch 1.7](https://pytorch.org/) for neural network training and inference and [GTSAM 4.0](https://github.com/borglab/gtsam) for pose graph optimization.
 
 To clone this repo as well as the DSAC* submodule use the command 
 
