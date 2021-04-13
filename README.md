@@ -4,6 +4,7 @@ pose estimation from RGB images.
 
 ## Table of Contents
 - [Background](#background)
+- [Dependencies](#dependencies)
 - [Install](#install)
 - [Usage](#usage)
 - [Authors](#authors)
@@ -16,10 +17,16 @@ The recent advancement in Deep Learning research has led to the development of e
 
 This repository contains our implementation of this pose estimation system. Our core design philosophy in this implementation is to strive for speed of inference and estimation. We use ROS melodic as the main communication protocol between modules. 
 
-## Install
+## Dependencies
 Although this project was built and tested using [ROS melodic](http://wiki.ros.org/melodic/Installation/Ubuntu), most of the other versions of ROS could potentially support this project.
 
 This project also uses [Pytorch 1.7](https://pytorch.org/) for neural network training and inference and [GTSAM 4.0](https://github.com/borglab/gtsam) for pose graph optimization.
+
+## Install
+To use this repo, first install these dependencies
+- [ROS melodic](http://wiki.ros.org/melodic/Installation/Ubuntu)
+- [Pytorch 1.7](https://pytorch.org/)
+- [GTSAM 4.0](https://github.com/borglab/gtsam)
 
 To clone this repo as well as the DSAC* submodule use the command 
 
