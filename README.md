@@ -3,11 +3,16 @@ This project repository contains code for PoseDSAC, an integrated system for
 pose estimation from RGB images.
 
 ## Table of Contents
-- [Background](#background)
-- [Dependencies](#dependencies)
-- [Install](#install)
-- [Usage](#usage)
-- [Authors](#authors)
+- [PoseDSAC](#posedsac)
+  - [Table of Contents](#table-of-contents)
+  - [Background](#background)
+  - [Dependencies](#dependencies)
+  - [Install](#install)
+  - [Dataset Preparation](#dataset-preparation)
+    - [NCLT Dataset](#nclt-dataset)
+    - [Other Datasets](#other-datasets)
+  - [Usage](#usage)
+  - [Authors](#authors)
 
 ## Background
 RGB cameras are cheap and ubiquitous sensors that can be found in almost every mobile device. In view of this, recent work in SLAM research has focused on performing pose estimation and localization using only RGB images from cameras. These efforts have been fairly successful at extracting features from images which could be used by a robot to track its displacement and its pose in a room. The feature extractors used in such efforts are often hand-designed and do not work
@@ -25,14 +30,49 @@ This project also uses [Pytorch 1.7](https://pytorch.org/) for neural network tr
 ## Install
 To use this repo, first install these dependencies
 - [ROS melodic](http://wiki.ros.org/melodic/Installation/Ubuntu)
-- [Pytorch 1.7](https://pytorch.org/)
+- [Pytorch 1.6 or above](https://pytorch.org/), tested on Pytorch 1.6/1.7
 - [GTSAM 4.0](https://github.com/borglab/gtsam)
+- [OpenCV 3.4.2](https://opencv.org/)
+- [scikit-image](https://scikit-image.org/)
 
 To clone this repo as well as the DSAC* submodule use the command 
 
 ```
 $ git clone --recursive https://github.com/alphonsusadubredu/posenet_gtsam
 ```
+
+For the DSAC*, you will need to install its the C++ extension by
+```
+$ cd dsacstar/dsacstar
+$ python setup.py install
+```
+Now you should have the DSAC* installed. Run `import dsacstar` to check!
+
+## Dataset Preparation
+Currently the DSAC* supports some popular datasets (e.g., [7Scenes (MSR)](https://www.microsoft.com/en-us/research/project/rgb-d-dataset-7-scenes/), [12Scenes (Stanford)](http://graphics.stanford.edu/projects/reloc/) and [Cambridge Landmarks](http://mi.eng.cam.ac.uk/projects/relocalisation/#dataset)) already. You may feel free to check the submodule of DSAC* to check its usage on aforementioned datasets.
+We also add support for [U-M NCLT dataset](http://robots.engin.umich.edu/nclt/), which is a more challenging dataset as its extent is much larger and its feature is hard to detect.
+
+### NCLT Dataset
+Firstly, you will need to go to [NCLT website](http://robots.engin.umich.edu/nclt/) to download the sequence you wish. After downloading,  unpack the file and manage the data for each sequence as shown below.
+```
+dsacstar
+├── datasets
+│   ├── nclt_source
+│   │   │── 20XX-XX-XX
+│   │   │   ├── groundtruth_20XX-XX-XX
+│   │   │   ├── lb3
+│   │   │   │   ├── CamX
+├── dsacstar
+```
+You may also need to change some parameters according to the cam you use and region you want to sample. Please check the `datasets/setup_nclt.py` script and find the `TODO` block!
+
+### Other Datasets
+To setup other datasets is quite simple, run the following commands the dataset would be downloaded and unpacked automatically. You may also check [DSAC*](https://github.com/vislearn/dsacstar) check the datails for each dataset.
+```
+$ cd dsacstar/datasets
+$ python setup_7scenes/12scenes/cambridge.py
+```
+
 
 ## Usage
 To run the entire pose estimation pipeline, first open a new terminal and run the following commands
