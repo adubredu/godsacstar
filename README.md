@@ -21,10 +21,15 @@ Although this project was built and tested using [ROS melodic](http://wiki.ros.o
 
 This project also uses [Pytorch](https://pytorch.org/) for neural network training and inference and [GTSAM](https://github.com/borglab/gtsam) for pose graph optimization.
 
+To clone this repo as well as the DSAC* submodule use the command 
+
+```
+git clone --recursive https://github.com/alphonsusadubredu/posenet_gtsam
+```
 
 ## Usage
 Just clone and use it lol...
-
+git clone --recursive
 
 
 ## Authors
