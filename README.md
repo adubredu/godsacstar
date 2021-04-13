@@ -44,7 +44,7 @@ To clone this repo as well as the DSAC* submodule use the command
 $ git clone --recursive https://github.com/alphonsusadubredu/posenet_gtsam
 ```
 
-For the DSAC*, you will need to install its the C++ extension by
+For the DSAC*, you will need to install its C++ extension by
 ```
 $ cd dsacstar/dsacstar
 $ python setup.py install
