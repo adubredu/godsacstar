@@ -1,6 +1,7 @@
-# PoseDSAC
+# GODSAC*
 This project repository contains code for PoseDSAC, an integrated system for 
 pose estimation from RGB images.
+
 
 ## Table of Contents
 - [PoseDSAC](#posedsac)
@@ -21,6 +22,8 @@ as well in environments where the sought-after features are scarce.
 The recent advancement in Deep Learning research has led to the development of effective function approximators that could be trained with the right data to approximate almost any function. In view of this, recent work in Visual SLAM has focused on ways to train neural networks to be effective feature extractors and pose estimators. In this work, we train a neural network to predict the pose of a robot given a sequence of images taken as the robot moves around a large area. We then jointly optimize the posterior joint probability of the predicted pose from the neural network and the robot's noisy odometry using a Pose SLAM formulation to get a better estimate of the robot's pose. We perform this optimization iteratively using GTSAM's implementation of iSAM2, an iterative smoothing and mapping system.
 
 This repository contains our implementation of this pose estimation system. Our core design philosophy in this implementation is to strive for speed of inference and estimation. We use ROS melodic as the main communication protocol between modules. 
+
+![](Overview.png)
 
 ## Dependencies
 Although this project was built and tested using [ROS melodic](http://wiki.ros.org/melodic/Installation/Ubuntu), most of the other versions of ROS could potentially support this project.
@@ -50,10 +53,10 @@ Now you should have the DSAC* installed. Run `import dsacstar` to check!
 
 ## Dataset Preparation
 Currently the DSAC* supports some popular datasets (e.g., [7Scenes (MSR)](https://www.microsoft.com/en-us/research/project/rgb-d-dataset-7-scenes/), [12Scenes (Stanford)](http://graphics.stanford.edu/projects/reloc/) and [Cambridge Landmarks](http://mi.eng.cam.ac.uk/projects/relocalisation/#dataset)) already. You may feel free to check the submodule of DSAC* to check its usage on aforementioned datasets.
-We also add support for [U-M NCLT dataset](http://robots.engin.umich.edu/nclt/), which is a more challenging dataset as its extent is much larger and its feature is hard to detect.
+We also add support for [U-M NCLT dataset](http://robots.engin.umich.edu/nclt/), which is a more challenging dataset as it contains a larger area and fewer extractable features.
 
 ### NCLT Dataset
-Firstly, you will need to go to [NCLT website](http://robots.engin.umich.edu/nclt/) to download the sequence you wish. After downloading,  unpack the file and manage the data for each sequence as shown below.
+Firstly, you will need to go to [NCLT website](http://robots.engin.umich.edu/nclt/) to download the sequence you want. After downloading,  unpack the file and format the data for each sequence as shown below.
 ```
 dsacstar
 ├── datasets
@@ -80,15 +83,15 @@ To run the entire pose estimation pipeline, first open a new terminal and run th
 $ cd posenet_gtsam/ros_ws
 $ catkin_make
 $ source devel/setup.bash
-$ rosrun gtsam_ros gtsam_rosnode
+$ roslaunch gtsam_ros dsam.launch
 ```
-These series of commands starts up the gtsam solver service in the background.
+<!-- These series of commands starts up the gtsam solver service in the background.
 
 Next, open a new terminal and run the following commands to perform pose estimation
 ```
 $ cd src/gtsam_ros/scripts
 $ python overall_workflow.py
-```
+``` -->
 
 ## Authors
 Alphonsus Adu-Bredu, Tianyi Liu, Yuqing Zhang, Jingyu Song, Noah Del Coro

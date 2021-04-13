@@ -75,8 +75,9 @@ class dsacStar():
         self.maxpixelerror = maxpixelerror
     
 
-    def predict(self, imageDir):
-        image = io.imread(imageDir)
+    def predict(self, image, opencv=False):
+        if not opencv:
+            image = io.imread(image)
         image = self.imgTransform(image)
         image = image.unsqueeze(0)
         image = image.cuda()

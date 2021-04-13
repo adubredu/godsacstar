@@ -3,8 +3,8 @@
     <node name="gtsam_rosnode" pkg="gtsam_ros" type="gtsam_rosnode" output="screen">
     </node>
 
-    <!-- pose msg -->
-    <node name="visualize_trajectory" pkg="gtsam_ros" type="visualize_trajectory" output="screen">
+    <!-- main -->
+    <node name="overall_workflow" pkg="gtsam_ros" type="overall_workflow.py" cwd="node" output="screen">
     </node>
 
     <!-- rviz -->

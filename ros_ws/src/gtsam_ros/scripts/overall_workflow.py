@@ -1,7 +1,7 @@
-#!/usr/bin/env python3
+#!/home/tannerliu/Software/miniconda3/envs/pytorch/bin/python
+######!/usr/bin/env python3
 import rospy
 import roslib
-import tf
 from geometry_msgs.msg import Pose, PoseArray, PoseStamped 
 from gtsam_ros.srv import *
 import numpy as np 
@@ -16,15 +16,17 @@ import cv2
 # dsac imports
 from dsacStar import dsacStar
 
+
 # plotting
 from matplotlib import pyplot as plt
-
-
-# odom = odometry('/root/posenet_gtsam/ros_ws/src/gtsam_ros/data/', 0, 0)
-odom = odometry('/home/tannerliu/Software/posenet_gtsam/ros_ws/src/gtsam_ros/data')
-image_dataset = '/home/tannerliu/Software/posenet_gtsam/ros_ws/src/gtsam_ros/data/rgb'
-weightsDir = '/home/tannerliu/Software/posenet_gtsam/dsacstar/network_output/nclt_0413_e2e.pth'
+print(os.getcwd())
+print("==========================")
+odom = odometry('../data')
+image_dataset = '../data/rgb'
+weightsDir = '../../../../dsacstar/network_output/nclt_0413_e2e.pth'
 focalLength = 1.556233184415584390e+02
+ds = dsacStar(weightsDir, focalLength)
+useRosbag = False
 
 def get_odometry_pose(img_timestamp):
     motionCum = [0,0,0]
@@ -47,7 +49,9 @@ def publish_entire_trajectory(estimates):
         p = Pose()
         p.position.x = pose[0]
         p.position.y = pose[1]
-        quaternion = tf.transformations.quaternion_from_euler(0,0,pose[2])
+        r = R.from_euler('z', pose[2], degrees=False)
+        quaternion = r.as_quat()
+        # quaternion = tf.transformations.quaternion_from_euler(0,0,pose[2])
         p.orientation.x = quaternion[0]
         p.orientation.y = quaternion[1]
         p.orientation.z = quaternion[2]
@@ -61,17 +65,19 @@ def publish_entire_trajectory(estimates):
     pub.publish(array)
 
 
-def publish_single_pose(pose_estimate):
+def publish_single_pose(pose):
     p = PoseStamped()
     p.header.frame_id = "map"
-    p.position.x = pose[0]
-    p.position.y = pose[1]
-    quaternion = tf.transformations.quaternion_from_euler(0,0,pose[2])
-    p.orientation.x = quaternion[0]
-    p.orientation.y = quaternion[1]
-    p.orientation.z = quaternion[2]
-    p.orientation.w = quaternion[3] 
-    pub = rospy.Publisher('/estimated_pose', Pose, queue_size=100)
+    p.pose.position.x = pose[0]
+    p.pose.position.y = pose[1]
+    r = R.from_euler('z', pose[2], degrees=False)
+    quaternion = r.as_quat()
+    # quaternion = tf.transformations.quaternion_from_euler(0,0,pose[2])
+    p.pose.orientation.x = quaternion[0]
+    p.pose.orientation.y = quaternion[1]
+    p.pose.orientation.z = quaternion[2]
+    p.pose.orientation.w = quaternion[3] 
+    pub = rospy.Publisher('/estimated_pose', PoseStamped, queue_size=100)
     pub.publish(p)
 
 
@@ -120,66 +126,67 @@ def optimize_pose_graph(measurement, odom_pose):
     return opt_result
 
 
-
+def callback(msg):
+    # img_timestamp = rospy.Time(msg.header.stamp)
+    # img_timestamp = img_timestamp.to_sec()*e6
+    img_timestamp = msg.header.stamp.secs*1e6 + msg.header.stamp.nsecs
+    print(type(img_timestamp))
+    print(img_timestamp)
+    img = np.frombuffer(msg.data, dtype=np.uint8).reshape(msg.height, msg.width, -1)
+    measurement = ds.predict(img, opencv=True)
+    r = R.from_matrix(measurement[:3, :3])
+    theta = r.as_euler('zyx', degrees=False)[0]
+    measurement = [measurement[0,3], measurement[1,3], theta]
+    odom_pose = get_odometry_pose(int(img_timestamp))
+    result = optimize_pose_graph(measurement, odom_pose)
+    # result_estimates.append(result)
+    publish_single_pose(result)
 
 
 
 if __name__ == '__main__':
-    rospy.init_node('pose_estimator')
+    if useRosbag:
+        rospy.init_node('pose_estimator')
+        rospy.Subscriber('nclt/lb3', Image, callback)
+        rospy.spin()
+    else:
+        rospy.init_node('pose_estimator')
 
-    result_estimates = []
-    result_x = []
-    result_y = []
-    ds = dsacStar(weightsDir, focalLength)
+        result_estimates = []
+        result_x = []
+        result_y = []
+        ds = dsacStar(weightsDir, focalLength)
 
-    # # dbg
-    # i = 0
-    # stop = 250
+        # # dbg
+        # i = 0
+        # stop = 250
 
-    for image in sorted(os.listdir(image_dataset)):
-        print(image)
-        imageDir = image_dataset + "/" + image
-        img_timestamp = int(image[11:-10])
-        measurement = ds.predict(imageDir)
-        # extract SE(2) pose
-        r = R.from_matrix(measurement[:3, :3])
-        theta = r.as_euler('zyx', degrees=False)[0]
-        measurement = [measurement[0,3], measurement[1,3], theta]
-        # retrieve current time step odometry
-        odom_pose = get_odometry_pose(img_timestamp)
-        result = optimize_pose_graph(measurement, odom_pose)
-        result_estimates.append(result)
+        for image in sorted(os.listdir(image_dataset)):
+            print(image)
+            imageDir = image_dataset + "/" + image
+            img_timestamp = int(image[11:-10])
+            measurement = ds.predict(imageDir)
+            # extract SE(2) pose
+            r = R.from_matrix(measurement[:3, :3])
+            theta = r.as_euler('zyx', degrees=False)[0]
+            measurement = [measurement[0,3], measurement[1,3], theta]
+            # retrieve current time step odometry
+            odom_pose = get_odometry_pose(img_timestamp)
+            result = optimize_pose_graph(measurement, odom_pose)
+            result_estimates.append(result)
 
-        
-        result_x.append(result[0])
-        result_y.append(result[1])
-        # i += 1
-        # if i == stop:
-        #     break
+            
+            result_x.append(result[0])
+            result_y.append(result[1])
+            # i += 1
+            # if i == stop:
+            #     break
 
-        # publish_single_pose(result)
-
-    publish_entire_trajectory(result_estimates)
-
-    # saving
-    result_x = np.array(result_x)
-    np.save("/home/tannerliu/Software/posenet_gtsam/ros_ws/src/gtsam_ros/helper/gtsam_x", result_x)
-    result_y = np.array(result_y)
-    np.save("/home/tannerliu/Software/posenet_gtsam/ros_ws/src/gtsam_ros/helper/gtsam_y", result_y)
+            publish_single_pose(result)
 
 
-# def callback(msg):
-#     stamp = msg.header.stamp
-#     print(stamp)
-#     # img = bridge.imgmsg_to_cv2(msg)
-#     img = np.frombuffer(msg.data, dtype=np.uint8).reshape(msg.height, msg.width, -1)
-#     cv2.imshow("duh", img) # TODO: BGR or RGB?
-#     cv2.waitKey(0)
-#     a = 1
-
-
-
-# if __name__ == '__main__':
-#     rospy.init_node('pose_estimator')
-#     rospy.Subscriber('nclt/lb3', Image, callback)
-#     rospy.spin()
+#     # saving
+#     # result_x = np.array(result_x)
+#     # np.save("/home/tannerliu/Software/posenet_gtsam/ros_ws/src/gtsam_ros/helper/gtsam_x", result_x)
+#     # result_y = np.array(result_y)
+#     # np.save("/home/tannerliu/Software/posenet_gtsam/ros_ws/src/gtsam_ros/helper/gtsam_y", result_y)
