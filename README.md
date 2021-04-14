@@ -4,7 +4,7 @@ pose estimation from RGB images.
 
 
 ## Table of Contents
-- [GODSAC](#godsac)
+- [GODSAC*](#godsac)
   - [Table of Contents](#table-of-contents)
   - [Background](#background)
   - [Dependencies](#dependencies)
