@@ -4,7 +4,7 @@ pose estimation from RGB images.
 
 
 ## Table of Contents
-- [PoseDSAC](#posedsac)
+- [GODSAC](#godsac)
   - [Table of Contents](#table-of-contents)
   - [Background](#background)
   - [Dependencies](#dependencies)
@@ -41,7 +41,7 @@ To use this repo, first install these dependencies
 To clone this repo as well as the DSAC* submodule use the command 
 
 ```
-$ git clone --recursive https://github.com/alphonsusadubredu/posenet_gtsam
+$ git clone --recursive https://github.com/alphonsusadubredu/godsacstar
 ```
 
 For the DSAC*, you will need to install its C++ extension by
