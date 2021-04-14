@@ -1,3 +1,6 @@
 [submodule "dsacstar"]
 	path = dsacstar
 	url = https://github.com/tannerliu347/dsacstar.git
+[submodule "dsacstar2"]
+	path = dsacstar
+	url = https://github.com/tannerliu347/dsacstar.git
