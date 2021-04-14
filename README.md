@@ -1,5 +1,5 @@
 # GODSAC*
-This project repository contains code for PoseDSAC, an integrated system for 
+This project repository contains code for GODSAC\*, an integrated system for 
 pose estimation from RGB images.
 
 
