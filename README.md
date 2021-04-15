@@ -7,6 +7,8 @@ pose estimation from RGB images.
 - [GODSAC*](#godsac)
   - [Table of Contents](#table-of-contents)
   - [Background](#background)
+    - [Overview](#overview)
+    - [Results](#results)
   - [Dependencies](#dependencies)
   - [Install](#install)
   - [Dataset Preparation](#dataset-preparation)
@@ -23,7 +25,14 @@ The recent advancement in Deep Learning research has led to the development of e
 
 This repository contains our implementation of this pose estimation system. Our core design philosophy in this implementation is to strive for speed of inference and estimation. We use ROS melodic as the main communication protocol between modules. 
 
+Feel free to check our introduction video at [GODSAC*](https://youtu.be/3n6or2iM_vA)!
+
+### Overview
 ![](Overview.png)
+
+### Results
+We test the GODSAC* pipeline on NCLT dataset and compare the results with [PoseNet++](https://github.com/PoseNet-Mobile-Robot/Mobile-Robotics).
+![](Results.png)
 
 ## Dependencies
 Although this project was built and tested using [ROS melodic](http://wiki.ros.org/melodic/Installation/Ubuntu), most of the other versions of ROS could potentially support this project.
