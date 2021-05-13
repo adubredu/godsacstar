@@ -16,6 +16,7 @@ pose estimation from RGB images.
     - [Other Datasets](#other-datasets)
   - [Usage](#usage)
   - [Authors](#authors)
+  - [Citation](#citation)
 
 ## Background
 RGB cameras are cheap and ubiquitous sensors that can be found in almost every mobile device. In view of this, recent work in SLAM research has focused on performing pose estimation and localization using only RGB images from cameras. These efforts have been fairly successful at extracting features from images which could be used by a robot to track its displacement and its pose in a room. The feature extractors used in such efforts are often hand-designed and do not work
@@ -104,3 +105,15 @@ $ python overall_workflow.py
 
 ## Authors
 Alphonsus Adu-Bredu, Tianyi Liu, Yuqing Zhang, Jingyu Song, Noah Del Coro
+
+## Citation
+```
+@misc{adubredu2021godsac,
+      title={GODSAC*: Graph Optimized DSAC* for Robot Relocalization}, 
+      author={Alphonsus Adu-Bredu and Noah Del Coro and Tianyi Liu and Jingyu Song and Yuqing Zhang},
+      year={2021},
+      eprint={2105.00546},
+      archivePrefix={arXiv},
+      primaryClass={cs.RO}
+}
+```
