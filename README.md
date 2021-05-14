@@ -110,7 +110,7 @@ Alphonsus Adu-Bredu, Tianyi Liu, Yuqing Zhang, Jingyu Song, Noah Del Coro
 ```
 @misc{adubredu2021godsac,
       title={GODSAC*: Graph Optimized DSAC* for Robot Relocalization}, 
-      author={Alphonsus Adu-Bredu and Noah Del Coro and Tianyi Liu and Jingyu Song and Yuqing Zhang},
+      author={Alphonsus Adu-Bredu and Noah Del Coro and Tianyi Liu},
       year={2021},
       eprint={2105.00546},
       archivePrefix={arXiv},
