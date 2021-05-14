@@ -104,7 +104,7 @@ $ python overall_workflow.py
 ``` -->
 
 ## Authors
-Alphonsus Adu-Bredu, Tianyi Liu, Yuqing Zhang, Jingyu Song, Noah Del Coro
+Alphonsus Adu-Bredu, Tianyi Liu, Noah Del Coro
 
 ## Citation
 ```
