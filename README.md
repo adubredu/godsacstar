@@ -2,6 +2,8 @@
 This project repository contains code for GODSAC\*, an integrated system for 
 pose estimation from RGB images.
 
+For more details, see our related paper: [https://arxiv.org/abs/2105.00546](https://arxiv.org/abs/2105.00546)
+
 
 ## Table of Contents
 - [GODSAC*](#godsac)
