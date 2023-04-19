@@ -53,7 +53,7 @@ To use this repo, first install these dependencies
 To clone this repo as well as the DSAC* submodule use the command 
 
 ```
-$ git clone --recursive https://github.com/alphonsusadubredu/godsacstar
+$ git clone --recursive https://github.com/adubredu/godsacstar
 ```
 
 For the DSAC*, you will need to install its C++ extension by running following commands. Before doing so, remember to specify the OpenCV include and lib directories in `setup.py`.
